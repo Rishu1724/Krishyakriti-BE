@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import learnRoutes from "./routes/learnRoutes.js";
 import feedbackRoutes from "./routes/feedbackRoutes.js";
 import connectDB from "./database/db.js";
+import Farmer from "./models/Farmer.js";
 
 dotenv.config();
 
@@ -23,6 +24,11 @@ if (MONGO_URI) {
 // ROUTES
 app.use("/api/learn", learnRoutes);
 app.use("/api/feedback", feedbackRoutes);
+app.get("/farmers-count", async (req, res) => {
+  const count = await Farmer.countDocuments();
+  res.json({ total: count });
+});
+
 
 // DB status endpoint for quick health check
 app.get('/api/dbstatus', (req, res) => {
