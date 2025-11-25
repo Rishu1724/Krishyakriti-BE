@@ -1,23 +1,50 @@
-# Learn Frontend (Vite + React + Tailwind)
+# Welcome to your Expo app 👋
 
-Minimal frontend demo that implements a `/learn` page using your color palette.
+This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
-Quick start (PowerShell):
+## Get started
 
-```powershell
-cd frontend
-npm install
-npm run dev
+1. Install dependencies
+
+   ```bash
+   npm install
+   ```
+
+2. Start the app
+
+   ```bash
+   npx expo start
+   ```
+
+In the output, you'll find options to open the app in a
+
+- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
+- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
+- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
+- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+
+You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+
+## Get a fresh project
+
+When you're ready, run:
+
+```bash
+npm run reset-project
 ```
 
-Notes:
-- Tailwind config includes custom colors: `primary` (#009179), `accent` (#006A58), `stonetone` (#E7E1C6), `textprimary` (#3C3B35).
-- The back button uses `accent` color; primary actions use `primary`.
-- I kept components minimal (Button, Card) to demonstrate usage and accessibility-friendly focus states.
+This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
 
-Accessibility:
-- Check contrast for text over `stonetone` background; adjust font-weight or background if any issues in your environment.
+## Learn more
 
-Next steps (I can do for you):
-- Add real content or connect `/learn` items to backend endpoints.
-- Add icons, tests, or additional components.
+To learn more about developing your project with Expo, look at the following resources:
+
+- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
+- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+
+## Join the community
+
+Join our community of developers creating universal apps.
+
+- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
+- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.

@@ -4,56 +4,91 @@ import {
   getMulticropping,
   getAgroforestry,
   getMarketInfo,
-} from "../controllers/learnController.js";
-import Resource from "../models/Resource.js";
+} from "../../controllers/learnController.js";  // FIXED PATH
+import Resource from "../../models/Resource.js";    // FIXED PATH
 
 const router = express.Router();
 
-// Provide a root list for /api/learn
+/**
+ * ------------------------------------------------------------
+ *  GET /api/learn
+ *  Returns list of available learning resources
+ *  Uses DB if available, otherwise static fallback
+ * ------------------------------------------------------------
+ */
 router.get("/", async (req, res) => {
   try {
-    // If DB connected, return resources from DB, else return static list
     if (mongoose.connection.readyState === 1) {
-      const items = await Resource.find({}, { title: 1, slug: 1, summary: 1 }).sort({ createdAt: -1 }).lean();
+      const items = await Resource.find(
+        {},
+        { title: 1, slug: 1, summary: 1 }
+      )
+        .sort({ createdAt: -1 })
+        .lean();
+
       return res.json(items);
     }
 
-    // fallback static list
+    // Static Fallback
     return res.json([
-      { id: 1, slug: "multicropping", title: "Multicropping", summary: "Growing two or more crops in the same field in a season." },
-      { id: 2, slug: "agroforestry", title: "Agroforestry", summary: "Integrating trees with crops." },
-      { id: 3, slug: "market", title: "Market Information", summary: "Sources and market information for crops." },
+      {
+        slug: "multicropping",
+        title: "Multicropping",
+        summary: "Growing two or more crops in the same field.",
+      },
+      {
+        slug: "agroforestry",
+        title: "Agroforestry",
+        summary: "Integrating trees, plants and crops for sustainability.",
+      },
+      {
+        slug: "market",
+        title: "Market Information",
+        summary: "Daily crop prices and agricultural market insights.",
+      },
     ]);
   } catch (err) {
-    console.error(err);
+    console.error("Error fetching learn list:", err);
     res.status(500).json({ error: "Server error" });
   }
 });
 
-// Dynamic slug: try DB first, fall back to static controllers
-router.get('/:slug', async (req, res) => {
+/**
+ * ------------------------------------------------------------
+ *  GET /api/learn/:slug
+ *  Dynamic content fetch:
+ *   1. Try DB
+ *   2. Fallback to static controllers
+ * ------------------------------------------------------------
+ */
+router.get("/:slug", async (req, res) => {
   const { slug } = req.params;
+
   try {
+    // If DB connected → try DB first
     if (mongoose.connection.readyState === 1) {
       const item = await Resource.findOne({ slug }).lean();
       if (item) return res.json(item);
     }
 
-    // fallback to existing controllers for known slugs
-    if (slug === 'multicropping') return getMulticropping(req, res);
-    if (slug === 'agroforestry') return getAgroforestry(req, res);
-    if (slug === 'market') return getMarketInfo(req, res);
+    // Static fallback — match known resources
+    switch (slug) {
+      case "multicropping":
+        return getMulticropping(req, res);
 
-    return res.status(404).json({ message: 'Not found' });
+      case "agroforestry":
+        return getAgroforestry(req, res);
+
+      case "market":
+        return getMarketInfo(req, res);
+
+      default:
+        return res.status(404).json({ message: "Not found" });
+    }
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error' });
+    console.error("Error fetching slug:", err);
+    res.status(500).json({ error: "Server error" });
   }
 });
-
-// These 3 match top cards on Learn.jsx
-router.get("/multicropping", getMulticropping);
-router.get("/agroforestry", getAgroforestry);
-router.get("/market", getMarketInfo);
 
 export default router;
